@@ -95,9 +95,9 @@ async function run() {
       const mailOptions = {
         from: "mohammodiabaria@gmail.com",
         to: email,
-        subject: "Donation Receipt & Certificate",
+        subject: "Donation Certificate",
         text: `Dear ${name},\n\nThank you for your generous donation. Please find your receipt and certificate attached.\n\nBest regards,\nDonation Team`,
-        attachments: [{ filename: "DonationReceipt.pdf", path: pdfPath }],
+        attachments: [{ filename: "DonationCertificate.pdf", path: pdfPath }],
       };
 
       transporter.sendMail(mailOptions, async (error, info) => {
