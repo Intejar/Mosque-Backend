@@ -309,7 +309,7 @@ async function run() {
 run().catch(console.log);
 
 app.get("/", async (req, res) => {
-  res.send("Turf server is running");
+  res.send("Mosque server is running");
 });
 
 app.listen(port, () => console.log(`Mosque server is running on port ${port}`));
