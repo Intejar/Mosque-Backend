@@ -93,7 +93,7 @@ async function run() {
       if (!user) return res.status(404).send("User not found");
 
       const mailOptions = {
-        from: "mohammodiabaria@gmail.com",
+        from: "meherabintejar@gmail.com",
         to: email,
         subject: "Donation Certificate",
         text: `Dear ${name},\n\nThank you for your generous donation. Please find your receipt and certificate attached.\n\nBest regards,\nDonation Team`,
