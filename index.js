@@ -14,22 +14,22 @@ app.use(cors());
 app.use(express.json());
 
 // Ensure 'uploads' directory exists
-// const uploadDir = path.join(__dirname, "uploads");
-// if (!fs.existsSync(uploadDir)) {
-//   fs.mkdirSync(uploadDir);
-// }
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
-// // Multer setup for file upload
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, uploadDir); // Save files in the 'uploads' folder
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, `${Date.now()}-${file.originalname}`);
-//   },
-// });
+// Multer setup for file upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir); // Save files in the 'uploads' folder
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
 
-// const upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
 
 const uri = `mongodb+srv://mosque:sbyNKmyqwu0mRIRg@cluster0.xk69pxb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(uri, {
@@ -52,8 +52,8 @@ async function run() {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "meherabintejar@gmail.com",
-        pass: "ykmbzqgwlghipnju",
+        user: "mohammodiabaria@gmail.com",
+        pass: "nkgk bbkz affz kgwf",
       },
     });
 
@@ -84,7 +84,7 @@ async function run() {
     });
 
     // Send email with attached PDF
-    app.post("/sendEmail", async (req, res) => {
+    app.post("/sendEmail", upload.single("pdf"), async (req, res) => {
       console.log("in", req.body);
       const { email, name, id } = req.body;
       const pdfPath = req.file.path;
@@ -93,7 +93,7 @@ async function run() {
       if (!user) return res.status(404).send("User not found");
 
       const mailOptions = {
-        from: "meherabintejar@gmail.com",
+        from: "mohammodiabaria@gmail.com",
         to: email,
         subject: "Donation Certificate",
         text: `Dear ${name},\n\nThank you for your generous donation. Please find your receipt and certificate attached.\n\nBest regards,\nDonation Team`,
@@ -130,7 +130,7 @@ async function run() {
         });
         if (existingUser) {
           // If the user exists, delete their data from both collections
-          await memberCollection.deleteOne({ email: data.email });
+          // await memberCollection.deleteOne({ email: data.email });
           await approveDonationCollection.deleteOne({
             transactionId: data.trxId,
           });
@@ -140,6 +140,9 @@ async function run() {
 
         // Insert the new member data
         await memberCollection.insertOne(data);
+        await approveDonationCollection.deleteOne({
+          transactionId: data.trxId,
+        });
 
         // If insertion is successful, respond with a success message
         res.send({ success: true, message: "Member added successfully." });
