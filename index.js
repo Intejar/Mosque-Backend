@@ -84,7 +84,7 @@ async function run() {
     });
 
     // Send email with attached PDF
-    app.post("/sendEmail", upload.single("pdf"), async (req, res) => {
+    app.post("/sendEmail", async (req, res) => {
       console.log("in", req.body);
       const { email, name, id } = req.body;
       const pdfPath = req.file.path;
